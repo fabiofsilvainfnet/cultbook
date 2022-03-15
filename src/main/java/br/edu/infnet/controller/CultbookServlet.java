@@ -48,7 +48,7 @@ public class CultbookServlet extends HttpServlet {
 			
 			if (id == 1) {
 				ClienteDAO dao = new ClienteDAO();
-				ClienteDTO cliente = ClienteDTO.toDTO(dao.buscar(id));
+				ClienteDTO cliente = ClienteDTO.toDTO(dao.buscar(id), null);
 				request.setAttribute("cliente", cliente);	
 			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher("cliente/cadastrar.jsp");
@@ -84,19 +84,31 @@ public class CultbookServlet extends HttpServlet {
 		String fone = request.getParameter("fone");
 		String senha = request.getParameter("senha");
 		
+		Cliente cliente = new Cliente();
+		cliente.setLogin(login);
+		cliente.setNome(nome);
+		cliente.setEmail(email);
+		cliente.setEndereco(endereco);
+		cliente.setFone(fone);
+		cliente.setSenha(senha);
+		
 		List<String> erros = validarParametros(login, senha, nome, email);
-		if (erros.size() > 0)
-			try (PrintWriter writer = response.getWriter()) {
-				erros.forEach(writer::println);
+		if (erros.size() > 0) {
+			ClienteDTO dto = ClienteDTO.toDTO(cliente, erros.toString());
+			request.setAttribute("clienteDTO", dto);
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("cliente/cadastrar.jsp");
+			try {
+				dispatcher.forward(request, response);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+		}
 		else {
-			Cliente cliente = new Cliente();
-			cliente.setLogin(login);
-			cliente.setNome(nome);
-			cliente.setEmail(email);
-			cliente.setEndereco(endereco);
-			cliente.setFone(fone);
-			cliente.setSenha(senha);
 			try (PrintWriter writer = response.getWriter()) {
 				writer.println("Cliente de nome " + nome + " cadastrado com sucesso.");
 			}

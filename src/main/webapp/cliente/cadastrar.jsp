@@ -33,6 +33,10 @@
 		<br>
 		<input type="submit" value="Cadastrar"><br>
 		<a href="../menuInicial.jsp">Voltar</a>
+		
+		<label>Erros</label>
+		<label><jsp:getProperty name="clienteDTO" property="erros"/></label> 
+		
 	</form>
 
 </body>
