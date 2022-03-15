@@ -16,6 +16,7 @@ import br.edu.infnet.dao.ClienteDAO;
 import br.edu.infnet.model.Cliente;
 import br.edu.infnet.model.Livro;
 import br.edu.infnet.service.LivroService;
+import br.edu.infnet.view.dto.ClienteDTO;
 
 /**
  * Servlet implementation class CultbookServlet
@@ -47,7 +48,7 @@ public class CultbookServlet extends HttpServlet {
 			
 			if (id == 1) {
 				ClienteDAO dao = new ClienteDAO();
-				Cliente cliente = dao.buscar(id);
+				ClienteDTO cliente = ClienteDTO.toDTO(dao.buscar(id));
 				request.setAttribute("cliente", cliente);	
 			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher("cliente/cadastrar.jsp");
